@@ -11,7 +11,7 @@
     <name>demo</name>
 
  <properties>
-        <mule.maven.plugin.version>2.8.2</mule.maven.plugin.version>
+        <mule.maven.plugin.version>3.9.0</mule.maven.plugin.version>
         <mule.version>4.4.0</mule.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cloudhub.username>pankajanushree</cloudhub.username>
