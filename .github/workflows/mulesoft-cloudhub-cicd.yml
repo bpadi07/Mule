@@ -88,9 +88,11 @@ jobs:
             </servers>
           </settings>" > ~/.m2/settings.xml
 
-      - name: Deploy to CloudHub (Sandbox)
+     
+
+      - name: Deploy to CloudHub 2.0 (Sandbox)
         run: |
           mvn -U clean deploy -DmuleDeploy \
             -Danypoint.username="${{ secrets.ANYPOINT_USERNAME }}" \
             -Danypoint.password="${{ secrets.ANYPOINT_PASSWORD }}" \
-            -Denvironment="${{ secrets.ANYPOINT_ENV }}"
+            -Denvironment="${{ secrets.ANYPOINT_ENV }}"  
