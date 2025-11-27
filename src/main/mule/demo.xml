@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="21755c02-38c2-44e2-aecb-7face7c7dd67" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="demoFlow" doc:id="f7b8df9b-09f1-420a-99b8-acc1e428b00b" >
+		<http:listener doc:name="Listener" doc:id="95bb949c-58d3-497b-a717-258a5cad0b01" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-payload value='"Welcome to mule world"' doc:name="Set Payload" doc:id="4cf88cb6-234b-4e9d-b813-181a36b75f19" />
+		<logger level="INFO" doc:name="Logger" doc:id="59f09a9a-c6eb-4022-8bfd-13018049f8e1" message="#[payload]"/>
+	</flow>
+	<!-- <flow name="demoFlow1" doc:id="a9e4762e-ec51-44ca-81d4-c5d1cdc5c790" >
+		<http:listener doc:name="Listener" doc:id="0c046153-5891-434c-b1e0-68e22e9ddc82" config-ref="HTTP_Listener_config" path="/test"/>
+		<ee:transform doc:name="Transform Message" doc:id="f0244603-7cad-4a16-ba88-1d708ec9869f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[1,2,3,4,5]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="6a3ef165-c976-4b8e-be1c-bb2bfd420366" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload filter ((item, index) -> isEven(item)) joinBy ","]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="bce457d4-fcd9-4053-973c-2e25bdea50e6" message="#[output application/json --- payload]"/>
+	</flow> -->
+</mule>
