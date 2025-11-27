@@ -4,27 +4,32 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.mycompany</groupId>
+   <groupId>com.mycompany</groupId>
     <artifactId>demo</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule-application</packaging>
     <name>demo</name>
 
-    <properties>
+ <properties>
         <mule.maven.plugin.version>3.7.1</mule.maven.plugin.version>
-
-        <!-- CloudHub 2.0 Required Fields -->
-        <anypoint.username>pankajanushree</anypoint.username>
-        <anypoint.password>Pankaj@2207</anypoint.password>
-        <environment>Sandbox</environment>       <!-- CH2 Environment Name -->
-        <runtime.version>4.4.0</runtime.version>  <!-- Mule Runtime -->
-        <region>us-east-1</region>                <!-- CH2 Region -->
-        <replicas>1</replicas>                   <!-- Replaces workers -->
+        <mule.version>4.4.0</mule.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <cloudhub.username>pankajanushree</cloudhub.username>
+        <cloudhub.password>Pankaj@2207</cloudhub.password>
+        <cloudhub.region>us-east-1</cloudhub.region>
+        <app.name>demo-sandbox</app.name>
+        <worker.size>0.1</worker.size>
+        <worker.count>1</worker.count>
     </properties>
 
+   
+    
+
+    
     <build>
         <plugins>
 
+            <!-- Mule Maven Plugin (CloudHub 2.0 Deployment) -->
             <plugin>
                 <groupId>org.mule.tools.maven</groupId>
                 <artifactId>mule-maven-plugin</artifactId>
@@ -35,14 +40,19 @@
                     <cloudHub2Deployment>
                         <uri>https://anypoint.mulesoft.com</uri>
 
+                        <!-- Deployment environment -->
                         <environment>${environment}</environment>
+
+                        <!-- CH2 required fields -->
                         <applicationName>${project.artifactId}</applicationName>
                         <runtimeVersion>${runtime.version}</runtimeVersion>
-                        <region>${region}</region>
+                        <region>us-east-1</region>
                         <target>CH2</target>
 
-                        <replicas>${replicas}</replicas>
+                        <!-- Replicas replace workers in CH2 -->
+                        <replicas>1</replicas>
 
+                        <!-- Credentials -->
                         <username>${anypoint.username}</username>
                         <password>${anypoint.password}</password>
                     </cloudHub2Deployment>
@@ -52,6 +62,7 @@
         </plugins>
     </build>
 
+   
     <dependencies>
         <dependency>
             <groupId>org.mule.connectors</groupId>
@@ -68,6 +79,7 @@
         </dependency>
     </dependencies>
 
+    
     <repositories>
         <repository>
             <id>anypoint-exchange-v3</id>
@@ -83,5 +95,17 @@
             <layout>default</layout>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mulesoft-releases</id>
+            <name>MuleSoft Releases</name>
+            <url>https://repository.mulesoft.org/releases/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
