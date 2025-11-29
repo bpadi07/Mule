@@ -8,10 +8,12 @@
     <artifactId>demo</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule-application</packaging>
+     <extensions>true</extensions>
+
     <name>demo</name>
 
  <properties>
-        <mule.maven.plugin.version>3.7.1</mule.maven.plugin.version>
+        <mule.maven.plugin.version>3.9.0</mule.maven.plugin.version>
         <mule.version>4.4.0</mule.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cloudhub.username>pankajanushree</cloudhub.username>
