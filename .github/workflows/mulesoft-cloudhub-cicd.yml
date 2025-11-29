@@ -56,27 +56,24 @@ jobs:
           sudo mv apache-maven-3.8.7 /usr/local/maven
           echo "/usr/local/maven/bin" >> $GITHUB_PATH
 
+
+      ###################################################################
+      # ⭐️ THIS IS WHERE YOU MUST ADD settings.xml (Correct Location) ⭐️
+      ###################################################################
       - name: Configure Maven Settings.xml
         run: |
           mkdir -p ~/.m2
-          echo "<settings>
-            <servers>
-              <server>
-                <id>anypoint-exchange</id>
-                <username>${{ secrets.ANYPOINT_USERNAME }}</username>
-                <password>${{ secrets.ANYPOINT_PASSWORD }}</password>
-              </server>
-              <server>
-                <id>mulesoft-releases</id>
-                <username>${{ secrets.ANYPOINT_USERNAME }}</username>
-                <password>${{ secrets.ANYPOINT_PASSWORD }}</password>
-              </server>
-            </servers>
-          </settings>" > ~/.m2/settings.xml
+          cat <<EOF > ~/.m2/settings.xml
+
+      ###################################################################
+      # ⭐️ settings.xml step ends here ⭐️
+      ###################################################################
+
 
       - name: Deploy to CloudHub 2.0
-        run: mvn -U mule:deploy \
-          -Danypoint.username="${{ secrets.ANYPOINT_USERNAME }}" \
-          -Danypoint.password="${{ secrets.ANYPOINT_PASSWORD }}" \
-          -Danypoint.org="${{ secrets.ANYPOINT_ORG }}" \
-          -Danypoint.environment="${{ secrets.ANYPOINT_ENV }}"
+        run: |
+          mvn -U mule:deploy \
+            -Danypoint.username="${{ secrets.ANYPOINT_USERNAME }}" \
+            -Danypoint.password="${{ secrets.ANYPOINT_PASSWORD }}" \
+            -Danypoint.org="${{ secrets.ANYPOINT_ORG }}" \
+            -Danypoint.environment="${{ secrets.ANYPOINT_ENV }}"
