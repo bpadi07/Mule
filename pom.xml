@@ -22,26 +22,14 @@
         <worker.count>1</worker.count>
     </properties>
 
-   <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+   
+    
 
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.mycompany</groupId>
-    <artifactId>demo</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>mule-application</packaging>
-
-    <properties>
-        <mule.runtime.version>4.4.0</mule.runtime.version>
-        <mule.maven.plugin.version>3.7.1</mule.maven.plugin.version>
-    </properties>
-
+    
     <build>
         <plugins>
 
+            <!-- Mule Maven Plugin (CloudHub 2.0 Deployment) -->
             <plugin>
                 <groupId>org.mule.tools.maven</groupId>
                 <artifactId>mule-maven-plugin</artifactId>
@@ -49,48 +37,31 @@
                 <extensions>true</extensions>
 
                 <configuration>
-
                     <cloudHub2Deployment>
-                        <provider>MC</provider>
+                        <uri>https://anypoint.mulesoft.com</uri>
 
-                        <!-- Credentials (coming from GitHub Secrets) -->
+                        <!-- Deployment environment -->
+                        <environment>${environment}</environment>
+
+                        <!-- CH2 required fields -->
+                        <applicationName>${project.artifactId}</applicationName>
+                        <runtimeVersion>${runtime.version}</runtimeVersion>
+                        <region>us-east-1</region>
+                        <target>CH2</target>
+
+                        <!-- Replicas replace workers in CH2 -->
+                        <replicas>1</replicas>
+
+                        <!-- Credentials -->
                         <username>${anypoint.username}</username>
                         <password>${anypoint.password}</password>
-
-                        <!-- Org + Environment -->
-                        <organization>${anypoint.org}</organization>
-                        <environment>${anypoint.environment}</environment>
-
-                        <!-- CloudHub 2.0 deployment -->
-                        <applicationName>${project.artifactId}</applicationName>
-                        <runtimeVersion>${mule.runtime.version}</runtimeVersion>
-                        <region>us-east-1</region>
-                        <replicas>1</replicas>
                     </cloudHub2Deployment>
-
                 </configuration>
             </plugin>
 
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>anypoint-exchange</id>
-            <url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
-        </repository>
-
-        <repository>
-            <id>mulesoft-releases</id>
-            <url>https://repository.mulesoft.org/releases/</url>
-        </repository>
-    </repositories>
-
-
-    
-
-    
-    
    
     <dependencies>
         <dependency>
