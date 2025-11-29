@@ -13,55 +13,39 @@
     <name>demo</name>
 
  <properties>
-        <mule.maven.plugin.version>3.8.0</mule.maven.plugin.version>
+        <mule.maven.plugin.version>3.9.0</mule.maven.plugin.version>
         <mule.version>4.4.0</mule.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cloudhub.username>pankajanushree</cloudhub.username>
-        <cloudhub.password>Pankaj@2207</cloudhub.password>
-        <cloudhub.region>us-east-1</cloudhub.region>
-        <app.name>demo-sandbox</app.name>
-        <worker.size>0.1</worker.size>
-        <worker.count>1</worker.count>
-    </properties>
+  </properties>
 
-   
-    
-
-    
-    <build>
+  <build>
         <plugins>
-
-            <!-- Mule Maven Plugin (CloudHub 2.0 Deployment) -->
-            <plugin>
+           <plugin>
                 <groupId>org.mule.tools.maven</groupId>
                 <artifactId>mule-maven-plugin</artifactId>
                 <version>${mule.maven.plugin.version}</version>
                 <extensions>true</extensions>
-
                 <configuration>
                     <cloudHub2Deployment>
-                        <uri>https://anypoint.mulesoft.com</uri>
+                         <provider>MC</provider>
 
-                        <!-- Deployment environment -->
-                        <environment>${environment}</environment>
-
-                        <!-- CH2 required fields -->
-                        <applicationName>${project.artifactId}</applicationName>
-                        <runtimeVersion>${runtime.version}</runtimeVersion>
-                        <region>us-east-1</region>
-                        <target>CH2</target>
-
-                        <!-- Replicas replace workers in CH2 -->
-                        <replicas>1</replicas>
-
-                        <!-- Credentials -->
+                         <!-- CloudHub 2.0 Credentials -->
                         <username>${anypoint.username}</username>
                         <password>${anypoint.password}</password>
-                    </cloudHub2Deployment>
-                </configuration>
-            </plugin>
 
-        </plugins>
+                  <!-- Org + Environment -->
+                        <organization>${anypoint.org}</organization>
+                        <environment>${anypoint.environment}</environment>
+
+            <!-- CH2 Deployment Config -->
+                <applicationName>${project.artifactId}</applicationName>
+                    <runtimeVersion>${mule.runtime.version}</runtimeVersion>
+                        <replicas>1</replicas>
+                        <region>us-east-1</region>
+                    </cloudHub2Deployment>
+               </configuration>
+            </plugin>
+    </plugins>
     </build>
 
    
