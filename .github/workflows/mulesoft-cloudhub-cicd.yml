@@ -1,8 +1,8 @@
-name: MuleSoft CI/CD - CloudHub Deployment (Sandbox)
+name: MuleSoft CI/CD - CloudHub 2.0 Deployment
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -13,33 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🔥 Install Maven 3.8.7 (Fixes Aether error)
-      - name: Install Maven 3.8.7
-        run: |
-          wget https://archive.apache.org/dist/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz
-          tar -xzf apache-maven-3.8.7-bin.tar.gz
-          sudo mv apache-maven-3.8.7 /usr/local/maven
-          echo "M2_HOME=/usr/local/maven" >> $GITHUB_ENV
-          echo "/usr/local/maven/bin" >> $GITHUB_PATH
-
-      - name: Set up Java 8 (Recommended for Mule 4.4.0)
+      - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "8"
 
-      # ⚠️ Temporarily remove cache (optional)
-      # It may cache wrong Maven version
-      # - name: Cache Maven repository
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.m2/repository
-      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      - name: Install Maven 3.8.7
+        run: |
+          wget https://archive.apache.org/dist/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz
+          tar -xzf apache-maven-3.8.7-bin.tar.gz
+          sudo mv apache-maven-3.8.7 /usr/local/maven
+          echo "/usr/local/maven/bin" >> $GITHUB_PATH
 
       - name: Build Mule Application
         run: mvn -U clean package -DskipTests
 
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mule-app
@@ -48,51 +38,45 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: Sandbox
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🔥 Install Maven 3.8.7 (Fixes deploy error)
-      - name: Install Maven 3.8.7
-        run: |
-          wget https://archive.apache.org/dist/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz
-          tar -xzf apache-maven-3.8.7-bin.tar.gz
-          sudo mv apache-maven-3.8.7 /usr/local/maven
-          echo "M2_HOME=/usr/local/maven" >> $GITHUB_ENV
-          echo "/usr/local/maven/bin" >> $GITHUB_PATH
-
-      - name: Set up Java 8 (Required for Mule 4.4.x)
+      - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "8"
 
-      # ⚠️ Remove cache temporarily
-      # - name: Cache Maven repository
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.m2/repository
-      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-
-      - name: Prepare credentials for Maven
+      - name: Install Maven 3.8.7
         run: |
+          wget https://archive.apache.org/dist/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz
+          tar -xzf apache-maven-3.8.7-bin.tar.gz
+          sudo mv apache-maven-3.8.7 /usr/local/maven
+          echo "/usr/local/maven/bin" >> $GITHUB_PATH
+
+      - name: Configure Maven Settings.xml
+        run: |
+          mkdir -p ~/.m2
           echo "<settings>
             <servers>
               <server>
-                <id>anypoint</id>
+                <id>anypoint-exchange</id>
+                <username>${{ secrets.ANYPOINT_USERNAME }}</username>
+                <password>${{ secrets.ANYPOINT_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>mulesoft-releases</id>
                 <username>${{ secrets.ANYPOINT_USERNAME }}</username>
                 <password>${{ secrets.ANYPOINT_PASSWORD }}</password>
               </server>
             </servers>
           </settings>" > ~/.m2/settings.xml
 
-     
-
-      - name: Deploy to CloudHub 2.0 (Sandbox)
-        run: |
-          mvn -U clean deploy -DmuleDeploy \
-            -Danypoint.username="${{ secrets.ANYPOINT_USERNAME }}" \
-            -Danypoint.password="${{ secrets.ANYPOINT_PASSWORD }}" \
-            -Denvironment="${{ secrets.ANYPOINT_ENV }}"  
+      - name: Deploy to CloudHub 2.0
+        run: mvn -U mule:deploy \
+          -Danypoint.username="${{ secrets.ANYPOINT_USERNAME }}" \
+          -Danypoint.password="${{ secrets.ANYPOINT_PASSWORD }}" \
+          -Danypoint.org="${{ secrets.ANYPOINT_ORG }}" \
+          -Danypoint.environment="${{ secrets.ANYPOINT_ENV }}"
