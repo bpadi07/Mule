@@ -57,17 +57,7 @@ jobs:
           echo "/usr/local/maven/bin" >> $GITHUB_PATH
 
 
-      ###################################################################
-      # ⭐️ THIS IS WHERE YOU MUST ADD settings.xml (Correct Location) ⭐️
-      ###################################################################
-      - name: Configure Maven Settings.xml
-        run: |
-          mkdir -p ~/.m2
-          cat <<EOF > ~/.m2/settings.xml
-
-      ###################################################################
-      # ⭐️ settings.xml step ends here ⭐️
-      ###################################################################
+    
 
 
       - name: Deploy to CloudHub 2.0
